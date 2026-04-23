@@ -1,0 +1,6 @@
+../Core/Src/BQ34Z100R2_driver.c:3:9:init_BQ34Z	1
+../Core/Src/BQ34Z100R2_driver.c:11:19:BQ34Z100R4_Read_SOC	1
+../Core/Src/BQ34Z100R2_driver.c:19:19:BQ34Z100Z_Read_Voltage	1
+../Core/Src/BQ34Z100R2_driver.c:28:19:BQ34Z100Z_Read_Register	1
+../Core/Src/BQ34Z100R2_driver.c:33:19:BQ34Z100Z_Read_Registers	1
+../Core/Src/BQ34Z100R2_driver.c:38:19:BQ34Z100Z_Write_Register	1
