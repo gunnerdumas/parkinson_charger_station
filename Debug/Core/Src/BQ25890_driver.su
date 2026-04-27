@@ -1,0 +1,13 @@
+../Core/Src/BQ25890_driver.c:4:9:init_BQ25890	24	static
+../Core/Src/BQ25890_driver.c:49:19:BQ25890_WatchDog_Disable	24	static
+../Core/Src/BQ25890_driver.c:68:19:BQ25890_Set_Voltage	24	static
+../Core/Src/BQ25890_driver.c:87:19:BQ25890_Set_Current	24	static
+../Core/Src/BQ25890_driver.c:109:19:BQ25890_Flags	24	static
+../Core/Src/BQ25890_driver.c:130:19:BQ25890_Get_Batt_Voltage	24	static
+../Core/Src/BQ25890_driver.c:148:19:BQ25890_Get_Temp	24	static
+../Core/Src/BQ25890_driver.c:160:19:BQ25890_Get_Sys_Voltage	24	static
+../Core/Src/BQ25890_driver.c:177:19:BQ25890_Get_VBUS	24	static
+../Core/Src/BQ25890_driver.c:193:19:BQ25890_Get_Charge_I	24	static
+../Core/Src/BQ25890_driver.c:207:19:BQ25890_Read_Register	40	static
+../Core/Src/BQ25890_driver.c:212:19:BQ25890_Read_Registers	40	static
+../Core/Src/BQ25890_driver.c:217:19:BQ25890_Write_Register	40	static

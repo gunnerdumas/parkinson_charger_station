@@ -28,6 +28,11 @@ Date created: 4/20/26
 #define BQ34_I                      0x10 //0x10-0x11
 #define BQ34_FLAGSB                 0x12 //0x12-0x13
 
+//FLASH CONTROLS
+#define BQ34_BLOCK_DATA_CTNL		0x61
+#define BQ43_DATA_FLASH_CLASS		0x3E
+#define BQ34_DATA_FLASH_BLK			0x3F
+
 //SUB CTNL COMMANDS
 #define BQ34_CNTL_STAT              0x0000
 #define BQ34_CNTL_DEVICE_TYPE       0x0001
@@ -53,19 +58,32 @@ Date created: 4/20/26
 typedef struct{
 	I2C_HandleTypeDef *i2cHandle;
 	uint8_t soc;
-	uint8_t voltage;
+	uint16_t voltage;
+	uint16_t capacity;
+	uint8_t flagsA[2];
+	uint8_t flagsB[2];
 }BQ34Z100Z;
 
 //Initlzation
 uint8_t init_BQ34Z(BQ34Z100Z *dev, I2C_HandleTypeDef *i2cHandle);
+HAL_StatusTypeDef BQ34Z100Z_Unseal(BQ34Z100Z *dev);
+HAL_StatusTypeDef BQ34Z100Z_Seal(BQ34Z100Z *dev);
+
+//Write flash
+//CAUTION WITH THIS DONT WRITE TO MANY TIMES
+HAL_StatusTypeDef BQ34Z100Z_BatteryConfigueration(BQ34Z100Z *dev);
+
 //DATA
 HAL_StatusTypeDef BQ34Z100R4_Read_SOC(BQ34Z100Z *dev);
 HAL_StatusTypeDef BQ34Z100Z_Read_Voltage(BQ34Z100Z *dev);
+HAL_StatusTypeDef BQ34Z100Z_Read_Capacity(BQ34Z100Z *dev);
+HAL_StatusTypeDef BQ34Z100Z_Read_Flags(BQ34Z100Z *dev);
+HAL_StatusTypeDef BQ34Z100Z_Read_Full_Chg(BQ34Z100Z *dev);
 
 //Register control
 HAL_StatusTypeDef BQ34Z100Z_Read_Register(BQ34Z100Z *dev, uint8_t reg, uint8_t *data);
 HAL_StatusTypeDef BQ34Z100Z_Read_Registers(BQ34Z100Z *dev, uint8_t reg, uint8_t *data, uint8_t length);
-HAL_StatusTypeDef BQ34Z100Z_Write_Register(BQ34Z100Z *dev, uint8_t reg, uint8_t *data);
+HAL_StatusTypeDef BQ34Z100Z_Write_Register(BQ34Z100Z *dev, uint8_t reg, uint8_t *data, uint8_t length);
 
 
 

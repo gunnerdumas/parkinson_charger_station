@@ -1,8 +1,9 @@
 #ifndef BQ25890_DRIVER_H
 #define BQ25890_DRIVER_H
+#include "stm32l4xx_hal.h"
 
 /*
-Driver for the BQ25890 TI sys lipo charger used in an stm32 enviroment part
+Driver for the BQ25890 TI sys lipo charger used in an stm32 environment part
 of the parkinson charger
 
 Author: Gunner Cook-Dumas
@@ -38,9 +39,36 @@ Date created: 4/20/26
 #define BQ25890_REG13 0x13
 #define BQ25890_REG14 0x14
 
-int initBQ25890();
+typedef struct
+{
+	I2C_HandleTypeDef *i2cHandle;
+	uint16_t battVoltage; //mV
+	uint16_t sysVoltage; //mV
+	uint16_t vbusVoltage; //mV
+	uint16_t chargeI; //mA
+	uint8_t temp;
+	uint8_t flagB;
+	uint8_t flagFaults;
+}BQ25890;
+
+//setup
+uint8_t init_BQ25890(BQ25890 *dev, I2C_HandleTypeDef *i2cHandle);
+HAL_StatusTypeDef BQ25890_WatchDog_Disable(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Set_Voltage(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Set_Current(BQ25890 *dev);
+
+//data
+HAL_StatusTypeDef BQ25890_Flags(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_Batt_Voltage(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_Temp(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_Sys_Voltage(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_VBUS(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_Charge_I(BQ25890 *dev);
 
 
-
+//register control
+HAL_StatusTypeDef BQ25890_Read_Register(BQ25890 *dev, uint8_t reg, uint8_t *data);
+HAL_StatusTypeDef BQ25890_Read_Registers(BQ25890 *dev, uint8_t reg, uint8_t *data, uint8_t length);
+HAL_StatusTypeDef BQ25890_Write_Register(BQ25890 *dev, uint8_t reg, uint8_t *data, uint8_t length);
 
 #endif BQ25890_DRIVER_H

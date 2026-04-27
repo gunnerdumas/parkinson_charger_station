@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "BQ34Z100R2_driver.h"
+#include "BQ25890_driver.h"
 
 /* USER CODE END Includes */
 
@@ -44,7 +45,8 @@
 I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN PV */
-BQ34Z100Z batt_monitor;
+BQ34Z100Z battMonitor;
+BQ25890 battChgr;
 
 /* USER CODE END PV */
 
@@ -94,9 +96,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, 1);
   HAL_GPIO_WritePin(EN_A_GPIO_Port, EN_A_Pin, 1);
-  init_BQ34Z(&batt_monitor, &hi2c2);
-  BQ34Z100R4_Read_SOC(&batt_monitor);
-  BQ34Z100Z_Read_Voltage(&batt_monitor);
+  init_BQ25890(&battChgr, &hi2c2);
+  BQ25890_Get_Temp(&battChgr);
+  BQ25890_Get_Sys_Voltage(&battChgr);
+  BQ25890_Get_Batt_Voltage(&battChgr);
+
+//  init_BQ34Z(&battMonitor, &hi2c2);
+////  BQ34Z100Z_Read_Voltage(&battMonitor);
+//  BQ34Z100R4_Read_SOC(&battMonitor);
+//  BQ34Z100Z_Read_Capacity(&battMonitor);
+//  BQ34Z100Z_Read_Full_Chg(&battMonitor);
+  HAL_Delay(1000);
 
   /* USER CODE END 2 */
 
