@@ -1,0 +1,12 @@
+../Core/Src/BQ34Z100R2_driver.c:226:19:BQ34Z100Z_Read_Register	1
+../Core/Src/BQ34Z100R2_driver.c:160:19:BQ34Z100R4_Read_SOC	2
+../Core/Src/BQ34Z100R2_driver.c:231:19:BQ34Z100Z_Read_Registers	1
+../Core/Src/BQ34Z100R2_driver.c:171:19:BQ34Z100Z_Read_Voltage	2
+../Core/Src/BQ34Z100R2_driver.c:182:19:BQ34Z100Z_Read_Capacity	2
+../Core/Src/BQ34Z100R2_driver.c:193:19:BQ34Z100Z_Read_Flags	3
+../Core/Src/BQ34Z100R2_driver.c:3:9:init_BQ34Z	1
+../Core/Src/BQ34Z100R2_driver.c:213:19:BQ34Z100Z_Read_Full_Chg	1
+../Core/Src/BQ34Z100R2_driver.c:236:19:BQ34Z100Z_Write_Register	1
+../Core/Src/BQ34Z100R2_driver.c:24:19:BQ34Z100Z_Unseal	7
+../Core/Src/BQ34Z100R2_driver.c:76:19:BQ34Z100Z_Seal	3
+../Core/Src/BQ34Z100R2_driver.c:100:19:BQ34Z100Z_BatteryConfigueration	8

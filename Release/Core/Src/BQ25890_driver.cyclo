@@ -1,0 +1,15 @@
+../Core/Src/BQ25890_driver.c:237:19:BQ25890_Read_Register	1
+../Core/Src/BQ25890_driver.c:114:19:BQ25890_Flags	3
+../Core/Src/BQ25890_driver.c:134:19:BQ25890_Get_Batt_Voltage	2
+../Core/Src/BQ25890_driver.c:152:19:BQ25890_Get_Temp	2
+../Core/Src/BQ25890_driver.c:164:19:BQ25890_Get_Sys_Voltage	2
+../Core/Src/BQ25890_driver.c:181:19:BQ25890_Get_VBUS	3
+../Core/Src/BQ25890_driver.c:197:19:BQ25890_Get_Charge_I	2
+../Core/Src/BQ25890_driver.c:210:19:BQ25890_Get_Charge_Status	1
+../Core/Src/BQ25890_driver.c:221:19:BQ25890_Get_USB_Status	2
+../Core/Src/BQ25890_driver.c:242:19:BQ25890_Read_Registers	1
+../Core/Src/BQ25890_driver.c:247:19:BQ25890_Write_Register	1
+../Core/Src/BQ25890_driver.c:53:19:BQ25890_WatchDog_Disable	2
+../Core/Src/BQ25890_driver.c:73:19:BQ25890_Set_Voltage	2
+../Core/Src/BQ25890_driver.c:92:19:BQ25890_Set_Current	2
+../Core/Src/BQ25890_driver.c:4:9:init_BQ25890	6

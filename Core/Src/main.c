@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "BQ34Z100R2_driver.h"
+//#include "BQ34Z100R2_driver.h"
 #include "BQ25890_driver.h"
 
 /* USER CODE END Includes */
@@ -45,7 +45,7 @@
 I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN PV */
-BQ34Z100Z battMonitor;
+//BQ34Z100Z battMonitor;
 BQ25890 battChgr;
 
 /* USER CODE END PV */
@@ -94,20 +94,27 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
+  //port enable
+  //the auto port fucntionality works, but
+  //got only couple hours left so screw it
+  //always on
   HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, 1);
   HAL_GPIO_WritePin(EN_A_GPIO_Port, EN_A_Pin, 1);
+  HAL_GPIO_WritePin(EN_B_GPIO_Port, EN_B_Pin, 1);
+  HAL_GPIO_WritePin(EN_C_GPIO_Port, EN_C_Pin, 1);
+  HAL_GPIO_WritePin(EN_D_GPIO_Port, EN_D_Pin, 1);
+
+  //set led deflauts
+  HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 1);
+  HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 1);
+  HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 1);
+  HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
+
+  // setup ics
   init_BQ25890(&battChgr, &hi2c2);
-  BQ25890_Get_Temp(&battChgr);
-  BQ25890_Get_Sys_Voltage(&battChgr);
-  BQ25890_Get_Batt_Voltage(&battChgr);
 
-//  init_BQ34Z(&battMonitor, &hi2c2);
-////  BQ34Z100Z_Read_Voltage(&battMonitor);
-//  BQ34Z100R4_Read_SOC(&battMonitor);
-//  BQ34Z100Z_Read_Capacity(&battMonitor);
-//  BQ34Z100Z_Read_Full_Chg(&battMonitor);
+
   HAL_Delay(1000);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,6 +122,13 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+//	  BQ25890_Get_Charge_Status(&battChgr);
+//	  BQ25890_Get_USB_Status(&battChgr);
+//	  BQ25890_Get_Charge_I(&battChgr);
+	  BQ25890_Get_Batt_Voltage(&battChgr);
+	  uint16_t voltageTest = battChgr.battVoltage;
+	  voltageTest = (voltageTest - 3200) * 100 / 1000;
+	  Set_LEDs(voltageTest);
 	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
@@ -245,10 +259,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, EN_A_Pin|EN_B_Pin|EN_C_Pin|EN_D_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_4_Pin|LED_3_Pin|LED_2_Pin|LED_1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, EN_5V_Pin|RED_LED_Pin|Y2_LED_Pin|Y_LED_Pin
+                          |GRN_LED_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : EN_A_Pin EN_B_Pin EN_C_Pin EN_D_Pin */
   GPIO_InitStruct.Pin = EN_A_Pin|EN_B_Pin|EN_C_Pin|EN_D_Pin;
@@ -263,10 +275,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EN_5V_Pin LED_4_Pin LED_3_Pin LED_2_Pin
-                           LED_1_Pin */
-  GPIO_InitStruct.Pin = EN_5V_Pin|LED_4_Pin|LED_3_Pin|LED_2_Pin
-                          |LED_1_Pin;
+  /*Configure GPIO pins : EN_5V_Pin RED_LED_Pin Y2_LED_Pin Y_LED_Pin
+                           GRN_LED_Pin */
+  GPIO_InitStruct.Pin = EN_5V_Pin|RED_LED_Pin|Y2_LED_Pin|Y_LED_Pin
+                          |GRN_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -284,6 +296,33 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void Set_LEDs(uint16_t percent)
+{
+	if(percent > 75){
+		HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 1);
+		HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 1);
+		HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 1);
+		HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
+	}else if(percent <=75 && percent > 50){
+		HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 0);
+		HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 1);
+		HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 1);
+		HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
+
+	}else if(percent <=50 && percent > 25){
+		HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 0);
+		HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 0);
+		HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 1);
+		HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
+	}else{
+		HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 0);
+		HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 0);
+		HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 0);
+		HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
+	}
+
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {

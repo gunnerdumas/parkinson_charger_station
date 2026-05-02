@@ -26,10 +26,10 @@ uint8_t init_BQ25890(BQ25890 *dev, I2C_HandleTypeDef *i2cHandle)
 		return 75;
 
 	//setup some extra varibles
-	//minimu sys voltage limit set to 3.2Volts
+	//minimu sys voltage limit set to 3.2Volts and enable auto charge
 	uint8_t cmd = 0;
 	status = BQ25890_Read_Register(dev, BQ25890_REG03, &cmd);
-	cmd = cmd & 0xF4;
+	cmd = cmd | 0x14;
 	status = BQ25890_Write_Register(dev, BQ25890_REG03, &cmd, 1);
 	if(status != HAL_OK)
 		return 100;
@@ -58,8 +58,9 @@ HAL_StatusTypeDef BQ25890_WatchDog_Disable(BQ25890 *dev)
 	if(status != HAL_OK)
 		return status;
 
-	//clear the bits 5 and 4 Watchdong
+	//clear the bits 5 and 4 Watchdong and set charing termination disapbled
 	cmd = cmd & 0xCF;
+	cmd = cmd | 0x00;
 	status = BQ25890_Write_Register(dev, BQ25890_REG07, &cmd, 1);
 	if(status != HAL_OK)
 		return status;
@@ -203,6 +204,32 @@ HAL_StatusTypeDef BQ25890_Get_Charge_I(BQ25890 *dev)
 
 	dev->chargeI = buffer;
 	return HAL_OK;
+
+}
+
+HAL_StatusTypeDef BQ25890_Get_Charge_Status(BQ25890 *dev)
+{
+	HAL_StatusTypeDef status;
+	uint8_t buffer = 0;
+	status = BQ25890_Read_Register(dev, BQ25890_REG0B, &buffer);
+	if(status != HAL_OK)
+		return status;
+
+	return HAL_OK;
+}
+
+HAL_StatusTypeDef BQ25890_Get_USB_Status(BQ25890 *dev)
+{
+	HAL_StatusTypeDef status;
+	uint8_t buffer = 0;
+	status = BQ25890_Read_Register(dev, BQ25890_REG0B, &buffer);
+	if(status != HAL_OK)
+		return status;
+
+	dev->usbStatus = (buffer & 0xE0) >> 5;
+
+	return HAL_OK;
+
 
 }
 

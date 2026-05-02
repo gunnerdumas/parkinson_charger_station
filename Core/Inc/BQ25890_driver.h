@@ -49,7 +49,9 @@ typedef struct
 	uint8_t temp;
 	uint8_t flagB;
 	uint8_t flagFaults;
+	uint8_t usbStatus;
 }BQ25890;
+
 
 //setup
 uint8_t init_BQ25890(BQ25890 *dev, I2C_HandleTypeDef *i2cHandle);
@@ -64,6 +66,8 @@ HAL_StatusTypeDef BQ25890_Get_Temp(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_Sys_Voltage(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_VBUS(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_Charge_I(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_Charge_Status(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Get_USB_Status(BQ25890 *dev);
 
 
 //register control
