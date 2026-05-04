@@ -60,7 +60,7 @@ HAL_StatusTypeDef BQ25890_WatchDog_Disable(BQ25890 *dev)
 
 	//clear the bits 5 and 4 Watchdong and set charing termination disapbled
 	cmd = cmd & 0xCF;
-	cmd = cmd | 0x00;
+	cmd = cmd | 0x10;
 	status = BQ25890_Write_Register(dev, BQ25890_REG07, &cmd, 1);
 	if(status != HAL_OK)
 		return status;
@@ -110,6 +110,23 @@ HAL_StatusTypeDef BQ25890_Set_Current(BQ25890 *dev)
 
 }
 
+HAL_StatusTypeDef BQ25890_Enable_Charge(BQ25890 *dev)
+{
+	HAL_StatusTypeDef status;
+	uint8_t cmd = 0;
+	status = BQ25890_Read_Register(dev, BQ25890_REG03, &cmd);
+	if(status != HAL_OK)
+		return status;
+
+	cmd = cmd | 0x10;
+	status = BQ25890_Write_Register(dev, BQ25890_REG03, &cmd, 1);
+	if(status != HAL_OK)
+		return status;
+
+	return HAL_OK;
+}
+
+
 //RETURN DATA
 HAL_StatusTypeDef BQ25890_Flags(BQ25890 *dev)
 {
@@ -127,6 +144,21 @@ HAL_StatusTypeDef BQ25890_Flags(BQ25890 *dev)
 	if(status != HAL_OK)
 		return status;
 	dev->flagFaults = buffer;
+
+	return HAL_OK;
+}
+
+HAL_StatusTypeDef BQ25890_Read_Faults(BQ25890 *dev)
+{
+	HAL_StatusTypeDef status;
+	uint8_t buffer = 0x00;
+	status = BQ25890_Read_Register(dev, BQ25890_REG0C, &buffer);
+	if(status != HAL_OK)
+		return status;
+
+	status = BQ25890_Read_Register(dev, BQ25890_REG0C, &buffer);
+	if(status != HAL_OK)
+		return status;
 
 	return HAL_OK;
 }
@@ -186,7 +218,7 @@ HAL_StatusTypeDef BQ25890_Get_VBUS(BQ25890 *dev)
 	if(status != HAL_OK)
 		return status;
 
-	if(buffer & 0x80 == 0x80)//vbus not attached
+	if((buffer & 0x80) == 0x80)//vbus not attached
 		dev->vbusVoltage = 0;
 	else //vbus attach get mesument
 		dev->vbusVoltage = buffer & 0x7F;

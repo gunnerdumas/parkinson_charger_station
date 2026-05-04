@@ -86,8 +86,8 @@ void Set_LEDs(uint16_t percent);
 #define WAKE_B_GPIO_Port GPIOA
 #define WAKE_A_Pin GPIO_PIN_11
 #define WAKE_A_GPIO_Port GPIOA
-#define INT_Pin GPIO_PIN_7
-#define INT_GPIO_Port GPIOB
+#define INT_USB_Pin GPIO_PIN_7
+#define INT_USB_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

@@ -58,9 +58,11 @@ uint8_t init_BQ25890(BQ25890 *dev, I2C_HandleTypeDef *i2cHandle);
 HAL_StatusTypeDef BQ25890_WatchDog_Disable(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Set_Voltage(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Set_Current(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Enable_Charge(BQ25890 *dev);
 
 //data
 HAL_StatusTypeDef BQ25890_Flags(BQ25890 *dev);
+HAL_StatusTypeDef BQ25890_Read_Faults(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_Batt_Voltage(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_Temp(BQ25890 *dev);
 HAL_StatusTypeDef BQ25890_Get_Sys_Voltage(BQ25890 *dev);

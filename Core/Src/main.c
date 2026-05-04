@@ -104,12 +104,6 @@ int main(void)
   HAL_GPIO_WritePin(EN_C_GPIO_Port, EN_C_Pin, 1);
   HAL_GPIO_WritePin(EN_D_GPIO_Port, EN_D_Pin, 1);
 
-  //set led deflauts
-  HAL_GPIO_WritePin(GRN_LED_GPIO_Port, GRN_LED_Pin, 1);
-  HAL_GPIO_WritePin(Y_LED_GPIO_Port, Y_LED_Pin, 1);
-  HAL_GPIO_WritePin(Y2_LED_GPIO_Port, Y2_LED_Pin, 1);
-  HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
-
   // setup ics
   init_BQ25890(&battChgr, &hi2c2);
 
@@ -122,14 +116,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//	  BQ25890_Get_Charge_Status(&battChgr);
-//	  BQ25890_Get_USB_Status(&battChgr);
-//	  BQ25890_Get_Charge_I(&battChgr);
-	  BQ25890_Get_Batt_Voltage(&battChgr);
 	  uint16_t voltageTest = battChgr.battVoltage;
 	  voltageTest = (voltageTest - 3200) * 100 / 1000;
 	  Set_LEDs(voltageTest);
-	  HAL_Delay(1000);
+	  HAL_Delay(100);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -269,11 +259,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ALERT_Pin INT_Pin */
-  GPIO_InitStruct.Pin = ALERT_Pin|INT_Pin;
+  /*Configure GPIO pin : ALERT_Pin */
+  GPIO_InitStruct.Pin = ALERT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(ALERT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : EN_5V_Pin RED_LED_Pin Y2_LED_Pin Y_LED_Pin
                            GRN_LED_Pin */
@@ -289,6 +279,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : INT_USB_Pin */
+  GPIO_InitStruct.Pin = INT_USB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(INT_USB_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -327,9 +323,10 @@ void Set_LEDs(uint16_t percent)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 
-  if(GPIO_Pin == WAKE_A_Pin)
+  if(GPIO_Pin == INT_USB_Pin)
   {
-//	  HAL_GPIO_WritePin(EN_A_GPIO_Port, EN_A_Pin, 1);
+	  BQ25890_Read_Faults(&battChgr);
+	  BQ25890_Enable_Charge(&battChgr);
 
   } else {
       __NOP();
